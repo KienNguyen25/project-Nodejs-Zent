@@ -39,8 +39,8 @@ class ListController {
 
   update = async (req, res, next) => {
     try {
-      const { title, id, description, position } = req.body;
-      // const { id } = req.params;
+      const { title, description, position } = req.body;
+      const { id } = req.params;
       console.log("updated board is success!");
       let data = {
         title: title,

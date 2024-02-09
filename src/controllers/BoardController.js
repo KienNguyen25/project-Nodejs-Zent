@@ -13,7 +13,7 @@ class BoardController {
   };
   create = async (req, res, _next) => {
     try {
-      const { title, cover } = req.body;
+      const { title } = req.body;
       console.log("create a Board");
       let data = {
         title: title,
@@ -33,10 +33,18 @@ class BoardController {
 
   update = async (req, res, next) => {
     try {
-      const { title, id,cover } = req.body;
-      // const { id } = req.params;
+      const { title } = req.body;
+      const { id } = req.params;
       console.log("updated board is success!");
-      let data = { title: title, id: id, cover:cover };
+      console.log(req.body);
+      let data = {
+        title: title,
+        id: id,
+        cover: {
+          originalname: req.files[0].originalname,
+          Buffer: req.files[0].buffer,
+        },
+      };
       const result = await BoardService.updateBoard(data);
       if (result) {
         res

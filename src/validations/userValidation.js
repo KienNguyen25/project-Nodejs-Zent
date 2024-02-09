@@ -7,7 +7,7 @@ const userValidationSchema = Joi.object({
   age: Joi.number().min(18).required(),
   phone: Joi.string().min(10).max(10).required(),
   password: Joi.string().min(8).required(),
-});
+}).options({stripUnknown: true});
 // Middleware kiểm tra và xác thực dữ liệu
 const validateUserData = (req, res, next) => {
   const { error, value } = userValidationSchema.validate(req.body, {

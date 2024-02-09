@@ -1,22 +1,34 @@
-const Card = require("../model/Card");
+// const Card = require("../model/Card");
 const CardService = require("../services/CardService");
 
 class CardController {
   createCard = async (req, res) => {
     try {
-      const { title, description, dueDate, member, cover } = req.body;
+      const { title, description, dueDate, member } = req.body;
       console.log("create Card success!");
+      // console.log(req.files);
+      const cover = req.files
+        .filter((file) => file.fieldname == "cover")
+        .map((file) => ({
+          originalname: file.originalname,
+          Buffer: file.buffer,
+        }))[0];
+      const attachments = req.files
+        .filter((file) => file.fieldname == "attachments")
+        .map((file) => ({
+          originalname: file.originalname,
+          Buffer: file.buffer,
+        }));
       const listId = req.body.listId;
       let dataCard = {
         title,
         description,
         dueDate,
         member,
-        cover: {
-          originalname: req.files[0].originalname,
-          Buffer: req.files[0].buffer,
-        },
+        cover,
+        attachments,
       };
+
       const card = await CardService.create(dataCard, listId);
       res.status(200).json({
         card,
@@ -64,33 +76,35 @@ class CardController {
 
   update = async (req, res, next) => {
     try {
-      const { title, id, description, member, cover } = req.body;
+      const { title, description, member, dueDate } = req.body;
+      const { cardId } = req.params;
       // Extract cover information from request if available
-      const updatedCover = req.files && req.files[0];
-      let updatedCoverData = null;
-
-      // Check if cover file exists in request
-      if (updatedCover) {
-        updatedCoverData = {
-          originalname: updatedCover.originalname,
-          buffer: updatedCover.buffer,
-        };
-      }
-      // const { id } = req.params;
+      const cover = req.files
+        .filter((file) => file.fieldname == "cover")
+        .map((file) => ({
+          originalname: file.originalname,
+          Buffer: file.buffer,
+        }))[0];
+      const attachments = req.files
+        .filter((file) => file.fieldname == "attachments")
+        .map((file) => ({
+          originalname: file.originalname,
+          Buffer: file.buffer,
+        }));
       console.log("updated board is success!");
       let data = {
         title: title,
-        id: id,
+        id: cardId,
         description: description,
         member: member,
-        cover: updatedCoverData, // Update cover data if provided
+        dueDate: dueDate,
+        cover,
+        attachments,
       };
       console.log("Updated card is successful!");
       const result = await CardService.updateCard(data);
       if (result) {
-        res
-          .status(200)
-          .json({ msg: "updated card is success", extra: result });
+        res.status(200).json({ msg: "updated card is success", extra: result });
       } else {
         // throw new Error('updated fail');
         res.status(403).json({

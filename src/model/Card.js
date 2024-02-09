@@ -6,9 +6,15 @@ const cardSchema = new mongoose.Schema(
       required: true,
     },
     cover: {
-      originalname : String,
-      Buffer: Buffer
+      originalname: String,
+      Buffer: Buffer,
     },
+    attachments: [
+      {
+        originalname: String,
+        Buffer: Buffer,
+      },
+    ],
     description: {
       type: String,
       required: false,
