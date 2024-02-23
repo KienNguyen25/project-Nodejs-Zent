@@ -5,7 +5,7 @@ class CardController {
     try {
       const { title, description, dueDate, member, listId } = req.body;
       console.log("create Card success!");
-      console.log(req.body);
+      // console.log(req.body);
       // console.log(req.files);
       const cover = req.files
         .filter((file) => file.fieldname == "cover")
