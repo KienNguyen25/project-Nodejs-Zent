@@ -1,24 +1,31 @@
-const mongoose = require('mongoose');
-const listSchema = new mongoose.Schema({
+const { number } = require("joi");
+const mongoose = require("mongoose");
+const listSchema = new mongoose.Schema(
+  {
     title: {
-        type: String, require: true
+      type: String,
+      require: true,
     },
     description: {
-        type: String, require: true
+      type: String,
+      require: true,
     },
-    position :{
-        type: String,
-        require: true
+    position: {
+      type: Number,
+      require: true,
     },
     board: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Board',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Board",
     },
-    cards: [{
+    cards: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Card',
-    }],
-
-}, { timestamps: true });
-const List = mongoose.model('List', listSchema);
+        ref: "Card",
+      },
+    ],
+  },
+  { timestamps: true }
+);
+const List = mongoose.model("List", listSchema);
 module.exports = List;

@@ -3,16 +3,9 @@ const ListService = require("../services/ListService");
 class ListController {
   createList = async (req, res) => {
     try {
-      const { title, description, position } = req.body;
+      const { title, description, position, boardId } = req.body;
       console.log("create list success!");
-      const boardId = req.body.boardId;
-      if (!boardId) {
-        // Handle the case where boardId is not provided in the request body
-        res.status(400).json({
-          error: "boardId is required in the request body",
-        });
-        return;
-      }
+      // console.log(req.body);
       let dataList = {
         title: title,
         description: description,
@@ -28,7 +21,9 @@ class ListController {
   };
   getAllList = async (req, res, next) => {
     try {
-      const lists = await ListService.getAll();
+      let { sortBy } = req.query;
+      // console.log(sortBy);
+      const lists = await ListService.getAll(sortBy);
       res.status(200).json({
         lists,
       });

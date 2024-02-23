@@ -1,6 +1,7 @@
 const Joi = require("joi");
 
 const cardValidationSchema = Joi.object({
+  listId: Joi.string(),
   title: Joi.string().required(),
   cover: Joi.object({
     originalname: Joi.string(),

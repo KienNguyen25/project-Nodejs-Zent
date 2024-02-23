@@ -7,19 +7,19 @@ class AuthController {
   login = async (req, res, next) => {
     try {
       console.log("function login");
-      const { username, password } = req.body;
-      const user = await User.findOne({ username, password });
+      const { email, password } = req.body;
+      const user = await User.findOne({ email, password });
       if (!user) {
         return res.status(401).json("Tai khoan khong ton tai!");
       } else {
         const token = jwt.sign(
-          { username: user.username, role: user.role },
+          { email: user.email, role: user.role },
           process.env.SECRET_KEY_JWT,
           { expiresIn: "20m" }
         );
         return res.status(200).json({
           accessToken: token,
-          username: user.username,
+          email: user.email,
           role: user.role,
         });
       }

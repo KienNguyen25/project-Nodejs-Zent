@@ -19,17 +19,6 @@ const cardSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    // members: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User', // Assuming there is a User model
-    // }],
-    // dueDate: {
-    //     type: Date,
-    // },
-    // attachments: [{
-    //     fileName: String,
-    //     url: String,
-    // }],
     dueDate: {
       type: Date,
     },

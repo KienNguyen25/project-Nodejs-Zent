@@ -1,24 +1,24 @@
-
 const jwt = require("jsonwebtoken");
 
-verifyToken =  (req, res, next) => {
-    let token = req.headers['x-access-token'] || req.headers['authorization'];
+verifyToken = (req, res, next) => {
+  let token = req.headers["x-access-token"] || req.headers["authorization"];
 
-    if (!token) {
-        return res.status(401).send({error: true, message: "Token không được cung cấp"});
+  if (!token) {
+    return res
+      .status(401)
+      .send({ error: true, message: "Token không được cung cấp" });
+  }
+
+  token = token.replace(/^Bearer\s+/, "");
+
+  jwt.verify(token, process.env.SECRET_KEY_JWT, async (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ error: true, message: "Từ chối truy cập" });
     }
-
-    token = token.replace(/^Bearer\s+/, "");
-
-    jwt.verify(token, process.env.SECRET_KEY_JWT, async (err, decoded) => {
-        if (err) {
-            return res.status(401).send({error: true, message: "Từ chối truy cập"});
-        }
-        req.username = decoded.username;
-        req.role = decoded.role;
-        next();
-    });
+    req.email = decoded.email;
+    req.role = decoded.role;
+    next();
+  });
 };
-
 
 module.exports = verifyToken;

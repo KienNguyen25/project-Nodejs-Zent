@@ -5,9 +5,13 @@ const userValidationSchema = Joi.object({
   }),
   email: Joi.string().email().required(),
   age: Joi.number().min(18).required(),
-  phone: Joi.string().min(10).max(10).required(),
+  phone: Joi.string().required().max(10).pattern(/^\d+$/).messages({
+    "any.required": `"phone" không được bỏ trống !`,
+    "string.max": `"phone" không được vượt quá 10 ký tự !`,
+    "string.pattern.base": `"phone" phải chứa chỉ chứa số !`,
+  }),
   password: Joi.string().min(8).required(),
-}).options({stripUnknown: true});
+}).options({ stripUnknown: true });
 // Middleware kiểm tra và xác thực dữ liệu
 const validateUserData = (req, res, next) => {
   const { error, value } = userValidationSchema.validate(req.body, {
@@ -25,4 +29,3 @@ const validateUserData = (req, res, next) => {
 };
 
 module.exports = validateUserData;
-

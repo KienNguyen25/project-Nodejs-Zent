@@ -1,11 +1,11 @@
-// const Card = require("../model/Card");
 const CardService = require("../services/CardService");
 
 class CardController {
   createCard = async (req, res) => {
     try {
-      const { title, description, dueDate, member } = req.body;
+      const { title, description, dueDate, member, listId } = req.body;
       console.log("create Card success!");
+      console.log(req.body);
       // console.log(req.files);
       const cover = req.files
         .filter((file) => file.fieldname == "cover")
@@ -19,7 +19,7 @@ class CardController {
           originalname: file.originalname,
           Buffer: file.buffer,
         }));
-      const listId = req.body.listId;
+
       let dataCard = {
         title,
         description,
@@ -34,7 +34,7 @@ class CardController {
         card,
       });
     } catch (error) {
-      throw error;
+      res.status(400).json({ msg: error.message });
     }
   };
   getAllCard = async (req, res, next) => {
@@ -103,16 +103,9 @@ class CardController {
       };
       console.log("Updated card is successful!");
       const result = await CardService.updateCard(data);
-      if (result) {
-        res.status(200).json({ msg: "updated card is success", extra: result });
-      } else {
-        // throw new Error('updated fail');
-        res.status(403).json({
-          msg: "update card fail",
-        });
-      }
+      res.status(200).json({ msg: "updated card is success", extra: result });
     } catch (error) {
-      throw error;
+      res.status(400).json({ msg: error.message });
     }
   };
 

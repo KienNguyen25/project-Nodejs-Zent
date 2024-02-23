@@ -6,6 +6,12 @@ class CardService {
     try {
       const newCard = new Card(dataCard, listId);
       const savedCard = await newCard.save();
+
+      const existingList = await List.findById({ _id: listId });
+      console.log(existingList);
+      if (!existingList) {
+        throw new Error("khon ton tai listId trong csdl");
+      }
       // Thêm Id của card mới vào mảng cards trong list
       await List.findByIdAndUpdate(listId, {
         $push: {
@@ -19,7 +25,7 @@ class CardService {
   };
   getAll = async () => {
     try {
-      const cards = await Card.find().populate('member');
+      const cards = await Card.find().populate("member");
       return cards;
     } catch (error) {
       throw error;
